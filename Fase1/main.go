@@ -51,8 +51,7 @@ func MenuLogin() {
 	fmt.Scanln(&password)
 	fmt.Println("═════════════════════════════")
 
-	//if usuario == "ADMIN_201901844" && password == "admin" {
-	if usuario == "a" && password == "a" {
+	if usuario == "ADMIN_201901844" && password == "admin" {
 		limpiar()
 		fmt.Println("En sesión: Administrador")
 		MenuAdmin()
