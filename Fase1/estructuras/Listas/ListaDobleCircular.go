@@ -89,16 +89,14 @@ func (l *ListaDobleCircular) Agregar(carnet int, nombre string, curso string, no
 }
 
 func (c *ListaDobleCircular) Imprimir() {
-	if c.Longitud != 0 {
-		contador := 1
-		aux := c.Inicio
-		for contador <= c.Longitud {
-			fmt.Println("------------------------------------------------")
-			fmt.Println(aux.Tutor.Curso, " -> ", aux.Tutor.Nombre)
-			fmt.Println("------------------------------------------------")
-			aux = aux.Siguiente
-			contador++
-		}
+	aux := c.Inicio
+	contador := 1
+	for contador <= c.Longitud {
+		fmt.Println("------------------------------------------------")
+		fmt.Println(aux.Tutor.Curso, " -> ", aux.Tutor.Nombre)
+		fmt.Println("------------------------------------------------")
+		aux = aux.Siguiente
+		contador++
 	}
 }
 
@@ -131,4 +129,3 @@ func (l *ListaDobleCircular) BuscarTutor(curso string) *NodoListaCircular {
 	}
 	return nil
 }
-

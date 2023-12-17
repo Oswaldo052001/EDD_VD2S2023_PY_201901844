@@ -1,10 +1,10 @@
 package main
 
 import (
+	"Proyecto/Fase1/estructuras/ArbolAVL"
 	"Proyecto/Fase1/estructuras/ColaPrioridad"
 	"Proyecto/Fase1/estructuras/Listas"
 	"Proyecto/Fase1/estructuras/MatrizDispersa"
-	"Proyecto/Fase1/estructuras/ArbolAVL"
 	"fmt"
 	"os"
 	"os/exec"
@@ -88,7 +88,7 @@ func MenuAdmin() {
 		case 2:
 			CargaEstudiantes()
 		case 3:
-			fmt.Println("Pendiente")
+			CargaCursos()
 		case 4:
 			ControlEstudiantes()
 			limpiar()
@@ -106,16 +106,16 @@ func MenuEstudiantes() {
 	opcion := 0
 	salir := false
 	for !salir {
-		fmt.Println("1. Ver Tutores Disponibles")
+		fmt.Println("\n1. Ver Tutores Disponibles")
 		fmt.Println("2. Asignarse Tutores")
 		fmt.Println("3. Salir")
 		fmt.Scanln(&opcion)
 		switch opcion {
 		case 1:
-			limpiar()
+			fmt.Print("\033[H\033[2J")
 			listaDobleCircular.Imprimir()
 		case 2:
-			limpiar()
+			fmt.Print("\033[H\033[2J")
 			AsignarCurso()
 		case 3:
 			fmt.Print("\033[H\033[2J")
@@ -124,50 +124,56 @@ func MenuEstudiantes() {
 	}
 }
 func AsignarCurso() {
-	limpiar()
 	opcion := ""
 	salir := false
 	for !salir {
 		fmt.Println("Teclee el codigo del curso: ")
 		fmt.Scanln(&opcion)
-		//Iria el primer If del Arbol (pendiente)
-		if listaDobleCircular.Buscar(opcion) {
-			TutorBuscado := listaDobleCircular.BuscarTutor(opcion)
-			estudiante, err := strconv.Atoi(loggeado_estudiante)
-			if err != nil {
+		limpiar()
+		if arbolCursos.Busqueda(opcion) {
+			if listaDobleCircular.Buscar(opcion) {
+				TutorBuscado := listaDobleCircular.BuscarTutor(opcion)
+				estudiante, err := strconv.Atoi(loggeado_estudiante)
+				if err != nil {
+					break
+				}
+				matrizDispersa.Insertar_Elemento(estudiante, TutorBuscado.Tutor.Carnet, opcion)
+				fmt.Println("Se asigno Correctamente....")
+				break
+			} else {
+				fmt.Println("No hay tutores para ese curso....")
 				break
 			}
-			matrizDispersa.Insertar_Elemento(estudiante, TutorBuscado.Tutor.Carnet, opcion)
-			matrizDispersa.Reporte("Matriz.jpg")
-			break
 		} else {
-			fmt.Println("No hay tutores para ese curso....")
+			fmt.Println("El curso no existe en el sistema")
 			break
 		}
+
 	}
 }
 
 func CargaTutores() {
+	limpiar()
 	ruta := ""
-	fmt.Print("Escriba la ruta del archivo: ")
+	fmt.Print("Escriba la ruta del archivo de tutores (.csv): ")
 	fmt.Scanln(&ruta)
 	colaPrioridad.LeerCSV(ruta)
 }
 
 func CargaEstudiantes() {
+	limpiar()
 	ruta := ""
-	fmt.Print("Nombre de Archivo: ")
+	fmt.Print("Escriba la ruta del archivo de estudiantes (.csv): ")
 	fmt.Scanln(&ruta)
 	listaDoble.LeerCSV(ruta)
 }
 
 func CargaCursos() {
-	fmt.Print("\033[H\033[2J")
+	limpiar()
 	ruta := ""
-	fmt.Print("Nombre de Archivo: ")
+	fmt.Print("Escriba la ruta del archivo de cursos (.json): ")
 	fmt.Scanln(&ruta)
-	listaDoble.LeerCSV(ruta)
-	fmt.Println("Se cargo los estudiantes")
+	arbolCursos.LeerJson(ruta)
 }
 
 func ControlEstudiantes() {
