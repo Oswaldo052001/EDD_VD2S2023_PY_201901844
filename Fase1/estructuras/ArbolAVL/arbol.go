@@ -1,10 +1,14 @@
 package ArbolAVL
 
 import (
+	"Proyecto/Fase1/estructuras/GenerarArchivos"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math"
 	"os"
+	"os/exec"
+	"strconv"
 )
 
 type ArbolAVL struct {
@@ -34,18 +38,20 @@ func (a *ArbolAVL) equilibrio(raiz *NodoArbol) int {
 	if raiz == nil {
 		return 0
 	}
-	return (a.altura(raiz.Derecho) - a.altura(raiz.Izquierdo)) // 1 - 0
+	return (a.altura(raiz.Derecho) - a.altura(raiz.Izquierdo))
 }
 
-func (a *ArbolAVL) rotacionI(raiz *NodoArbol) *NodoArbol { //Raiz = 10
-	raiz_derecho := raiz.Derecho             // 10.derecho = 15
-	hijo_izquierdo := raiz_derecho.Izquierdo // 10.derecho.izquierdo = null
-	raiz_derecho.Izquierdo = raiz            // 15.izquierdo = 10
-	raiz.Derecho = hijo_izquierdo            // 10.derecho = null
+func (a *ArbolAVL) rotacionI(raiz *NodoArbol) *NodoArbol {
+	raiz_derecho := raiz.Derecho
+	hijo_izquierdo := raiz_derecho.Izquierdo
+	raiz_derecho.Izquierdo = raiz
+	raiz.Derecho = hijo_izquierdo
+
 	/*Calcular nuevamente alturas de raiz*/
 	numeroMax := math.Max(float64(a.altura(raiz.Izquierdo)), float64(a.altura(raiz.Derecho)))
 	raiz.Altura = 1 + int(numeroMax)
 	raiz.Factor_Equilibrio = a.equilibrio(raiz)
+
 	/*Calcular nuevamente alturas de raiz.derecho*/
 	numeroMax = math.Max(float64(a.altura(raiz_derecho.Izquierdo)), float64(a.altura(raiz_derecho.Derecho)))
 	raiz_derecho.Altura = 1 + int(numeroMax)
@@ -53,11 +59,12 @@ func (a *ArbolAVL) rotacionI(raiz *NodoArbol) *NodoArbol { //Raiz = 10
 	return raiz_derecho
 }
 
-func (a *ArbolAVL) rotacionD(raiz *NodoArbol) *NodoArbol { //Raiz = 20
-	raiz_izquierdo := raiz.Izquierdo       // 20.izquierdo = 15
-	hijo_derecho := raiz_izquierdo.Derecho // 20.izquierdo.derecho = null
-	raiz_izquierdo.Derecho = raiz          //15.derecho = 20
-	raiz.Izquierdo = hijo_derecho          // 20.izquierdo = null
+func (a *ArbolAVL) rotacionD(raiz *NodoArbol) *NodoArbol {
+	raiz_izquierdo := raiz.Izquierdo
+	hijo_derecho := raiz_izquierdo.Derecho
+	raiz_izquierdo.Derecho = raiz
+	raiz.Izquierdo = hijo_derecho
+
 	/*Calcular nuevamente alturas de raiz.derecho*/
 	numeroMax := math.Max(float64(a.altura(raiz.Izquierdo)), float64(a.altura(raiz.Derecho)))
 	raiz.Altura = 1 + int(numeroMax)
@@ -126,9 +133,12 @@ func (a *ArbolAVL) Busqueda(valor string) bool {
 }
 
 func (a *ArbolAVL) LeerJson(ruta string) {
+	limpiar()
 	data, err := os.ReadFile(ruta)
 	if err != nil {
 		log.Fatal("Error al leer el archivo:", err)
+	} else {
+		fmt.Println("▬▬ ¡Archivo cargado correctamente! ▬▬")
 	}
 
 	var datos DatosCursos
@@ -140,4 +150,70 @@ func (a *ArbolAVL) LeerJson(ruta string) {
 	for _, curso := range datos.Cursos {
 		a.InsertarElemento(curso.Codigo)
 	}
+}
+
+func limpiar() {
+	cmd := exec.Command("cmd", "/c", "cls")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+func (a *ArbolAVL) ReporteCursos() {
+	cadena := ""
+	nombre_archivo := "Reportes/Reportes.dot/ReporteCursos.dot"
+	nombre_imagen := "Reportes/ReporteCursos.jpg"
+	if a.Raiz != nil {
+		cadena += "digraph arbol{ "
+		cadena += a.retornarValoresArbol(a.Raiz, 0)
+		cadena += "}"
+	}
+
+	GenerarArchivos.CrearArchivo(nombre_archivo, "de cursos")
+	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo)
+	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
+}
+
+func (a *ArbolAVL) retornarValoresArbol(raiz *NodoArbol, indice int) string {
+	cadena := ""
+	numero := indice + 1
+	if raiz != nil {
+		cadena += "\""
+		cadena += raiz.Valor
+		cadena += "\" ;"
+		if raiz.Izquierdo != nil && raiz.Derecho != nil {
+			cadena += " x" + strconv.Itoa(numero) + " [label=\"\",width=.1,style=invis];"
+			cadena += "\""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += a.retornarValoresArbol(raiz.Izquierdo, numero)
+			cadena += "\""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += a.retornarValoresArbol(raiz.Derecho, numero)
+			cadena += "{rank=same" + "\"" + (raiz.Izquierdo.Valor) + "\"" + " -> " + "\"" + (raiz.Derecho.Valor) + "\"" + " [style=invis]}; "
+		} else if raiz.Izquierdo != nil && raiz.Derecho == nil {
+			cadena += " x" + strconv.Itoa(numero) + " [label=\"\",width=.1,style=invis];"
+			cadena += "\""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += a.retornarValoresArbol(raiz.Izquierdo, numero)
+			cadena += "\""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += "x" + strconv.Itoa(numero) + "[style=invis]"
+			cadena += "{rank=same" + "\"" + (raiz.Izquierdo.Valor) + "\"" + " -> " + "x" + strconv.Itoa(numero) + " [style=invis]}; "
+		} else if raiz.Izquierdo == nil && raiz.Derecho != nil {
+			cadena += " x" + strconv.Itoa(numero) + " [label=\"\",width=.1,style=invis];"
+			cadena += "\""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += "x" + strconv.Itoa(numero) + "[style=invis]"
+			cadena += "; \""
+			cadena += raiz.Valor
+			cadena += "\" -> "
+			cadena += a.retornarValoresArbol(raiz.Derecho, numero)
+			cadena += "{rank=same" + " x" + strconv.Itoa(numero) + " -> \"" + (raiz.Derecho.Valor) + "\"" + " [style=invis]}; "
+		}
+	}
+	return cadena
 }

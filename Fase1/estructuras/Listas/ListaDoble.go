@@ -1,6 +1,7 @@
 package Listas
 
 import (
+	"Proyecto/Fase1/estructuras/GenerarArchivos"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -79,6 +80,36 @@ func (l *ListaDoble) LeerCSV(ruta string) {
 		l.Agregar(valor, linea[1])
 	}
 }
+
+func (l *ListaDoble) ReporteAlumnos() {
+	nombreArchivo := "Reportes/Reportes.dot/ReporteAlumnos.dot"
+	nombreImagen := "Reportes/ReporteAlumnos.jpg"
+	texto := "digraph lista{\n"
+	texto += "rankdir=LR;\n"
+	texto += "node[shape = record];\n"
+	texto += "nodonull1[label=\"null\"];\n"
+	texto += "nodonull2[label=\"null\"];\n"
+	aux := l.Inicio
+	contador := 0
+	texto += "nodonull1->nodo0 [dir=back];\n"
+	for i := 0; i < l.Longitud; i++ {
+		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + "Nombre: " + aux.Alumno.Nombre + "\\n Carnet: " + strconv.Itoa(aux.Alumno.Carnet) + "\"];\n"
+		aux = aux.Siguiente
+	}
+	for i := 0; i < l.Longitud-1; i++ {
+		c := i + 1
+		texto += "nodo" + strconv.Itoa(i) + "->nodo" + strconv.Itoa(c) + ";\n"
+		texto += "nodo" + strconv.Itoa(c) + "->nodo" + strconv.Itoa(i) + ";\n"
+		contador = c
+	}
+	texto += "nodo" + strconv.Itoa(contador) + "->nodonull2;\n"
+	texto += "}"
+
+	GenerarArchivos.CrearArchivo(nombreArchivo, "alumnos")
+	GenerarArchivos.EscribirArchivo(texto, nombreArchivo)
+	GenerarArchivos.Ejecutar(nombreImagen, nombreArchivo)
+}
+
 func limpiar() {
 	cmd := exec.Command("cmd", "/c", "cls")
 	cmd.Stdout = os.Stdout

@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func CrearArchivo(nombre_archivo string) {
+func CrearArchivo(nombre_archivo string, nombreReporte string) {
 	var _, err = os.Stat(nombre_archivo)
 
 	if os.IsNotExist(err) {
@@ -16,7 +16,7 @@ func CrearArchivo(nombre_archivo string) {
 		}
 		defer file.Close()
 	}
-	fmt.Println("-► -► Archivo generado exitosamente")
+	fmt.Println("Reporte " + nombreReporte + " generado exitosamente")
 }
 
 func EscribirArchivo(contenido string, nombre_archivo string) {
@@ -33,7 +33,7 @@ func EscribirArchivo(contenido string, nombre_archivo string) {
 	if err != nil {
 		return
 	}
-	fmt.Println("-► -► Archivo generado exitosamente")
+	//fmt.Println("-► -► Archivo generado exitosamente")
 }
 
 func Ejecutar(nombre_imagen string, archivo string) {

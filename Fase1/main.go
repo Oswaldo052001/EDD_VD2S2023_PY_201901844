@@ -93,7 +93,8 @@ func MenuAdmin() {
 			ControlEstudiantes()
 			limpiar()
 		case 5:
-			fmt.Println("Mis Reportes")
+			generarReportes()
+
 		case 6:
 			salir = true
 			limpiar()
@@ -123,6 +124,31 @@ func MenuEstudiantes() {
 		}
 	}
 }
+
+func CargaTutores() {
+	limpiar()
+	ruta := ""
+	fmt.Print("Escriba la ruta del archivo de tutores (.csv): ")
+	fmt.Scanln(&ruta)
+	colaPrioridad.LeerCSV(ruta)
+}
+
+func CargaEstudiantes() {
+	limpiar()
+	ruta := ""
+	fmt.Print("Escriba la ruta del archivo de estudiantes (.csv): ")
+	fmt.Scanln(&ruta)
+	listaDoble.LeerCSV(ruta)
+}
+
+func CargaCursos() {
+	limpiar()
+	ruta := ""
+	fmt.Print("Escriba la ruta del archivo de cursos (.json): ")
+	fmt.Scanln(&ruta)
+	arbolCursos.LeerJson(ruta)
+}
+
 func AsignarCurso() {
 	opcion := ""
 	salir := false
@@ -152,30 +178,6 @@ func AsignarCurso() {
 	}
 }
 
-func CargaTutores() {
-	limpiar()
-	ruta := ""
-	fmt.Print("Escriba la ruta del archivo de tutores (.csv): ")
-	fmt.Scanln(&ruta)
-	colaPrioridad.LeerCSV(ruta)
-}
-
-func CargaEstudiantes() {
-	limpiar()
-	ruta := ""
-	fmt.Print("Escriba la ruta del archivo de estudiantes (.csv): ")
-	fmt.Scanln(&ruta)
-	listaDoble.LeerCSV(ruta)
-}
-
-func CargaCursos() {
-	limpiar()
-	ruta := ""
-	fmt.Print("Escriba la ruta del archivo de cursos (.json): ")
-	fmt.Scanln(&ruta)
-	arbolCursos.LeerJson(ruta)
-}
-
 func ControlEstudiantes() {
 	limpiar()
 	opcion := 0
@@ -203,6 +205,15 @@ func ControlEstudiantes() {
 			fmt.Println("Opcion invalida")
 		}
 	}
+}
+
+func generarReportes() {
+	limpiar()
+	listaDoble.ReporteAlumnos()
+	listaDobleCircular.ReporteTutores()
+	arbolCursos.ReporteCursos()
+	//matrizDispersa.Reporte()
+
 }
 
 func limpiar() {

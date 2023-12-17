@@ -139,10 +139,10 @@ func (m *Matriz) Insertar_Elemento(carnet_estudiante int, carnet_tutor int, curs
 	}
 }
 
-func (m *Matriz) Reporte(nombre string) {
+func (m *Matriz) Reporte() {
 	texto := ""
-	nombre_archivo := "./matriz.dot"
-	nombre_imagen := nombre
+	nombre_archivo := "Reportes/Reportes.dot/ReporteAsignaciones.dot"
+	nombre_imagen := "Reportes/ReporteAsignaciones.jpg"
 	aux1 := m.Raiz
 	aux2 := m.Raiz
 	aux3 := m.Raiz
@@ -196,7 +196,7 @@ func (m *Matriz) Reporte(nombre string) {
 		texto = "No hay elementos en la matriz"
 	}
 	//fmt.Println(texto)
-	GenerarArchivos.CrearArchivo(nombre_archivo)
+	GenerarArchivos.CrearArchivo(nombre_archivo, "de asignaciones")
 	GenerarArchivos.EscribirArchivo(texto, nombre_archivo)
 	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
 }

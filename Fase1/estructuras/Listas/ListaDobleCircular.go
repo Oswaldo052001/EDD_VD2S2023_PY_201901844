@@ -1,6 +1,10 @@
 package Listas
 
-import "fmt"
+import (
+	"Proyecto/Fase1/estructuras/GenerarArchivos"
+	"fmt"
+	"strconv"
+)
 
 type ListaDobleCircular struct {
 	Inicio   *NodoListaCircular
@@ -128,4 +132,31 @@ func (l *ListaDobleCircular) BuscarTutor(curso string) *NodoListaCircular {
 		contador++
 	}
 	return nil
+}
+
+func (l *ListaDobleCircular) ReporteTutores() {
+	nombreArchivo := "Reportes/Reportes.dot/ReporteTutores.dot"
+	nombreImagen := "Reportes/ReporteTutores.jpg"
+	texto := "digraph lista{\n"
+	texto += "rankdir=LR;\n"
+	texto += "node[shape = record];\n"
+	aux := l.Inicio
+	contador := 0
+	for i := 0; i < l.Longitud; i++ {
+		texto += "nodo" + strconv.Itoa(i) + "[label=\"" + "Nombre: " + aux.Tutor.Nombre + "\\n Carnet: " + strconv.Itoa(aux.Tutor.Carnet) + "\"];\n"
+		aux = aux.Siguiente
+	}
+	for i := 0; i < l.Longitud-1; i++ {
+		c := i + 1
+		texto += "nodo" + strconv.Itoa(i) + "->nodo" + strconv.Itoa(c) + ";\n"
+		texto += "nodo" + strconv.Itoa(c) + "->nodo" + strconv.Itoa(i) + ";\n"
+		contador = c
+	}
+	texto += "nodo" + strconv.Itoa(contador) + "->nodo0 \n"
+	texto += "nodo0 -> " + "nodo" + strconv.Itoa(contador) + "\n"
+	texto += "}"
+
+	GenerarArchivos.CrearArchivo(nombreArchivo, "tutores")
+	GenerarArchivos.EscribirArchivo(texto, nombreArchivo)
+	GenerarArchivos.Ejecutar(nombreImagen, nombreArchivo)
 }
