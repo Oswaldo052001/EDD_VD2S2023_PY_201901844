@@ -108,8 +108,8 @@ func (a *ArbolB) Insertar(valor int) { //15
 /***************************************/
 func (a *ArbolB) Graficar(nombre string) {
 	cadena := ""
-	nombre_archivo := "./" + nombre + ".dot"
-	nombre_imagen := nombre + ".jpg"
+	nombre_archivo := "Reportes/rep.dot/" + nombre + ".dot"
+	nombre_imagen := "Reportes/" + nombre + ".jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
 		cadena += a.grafo(a.Raiz.Primero)

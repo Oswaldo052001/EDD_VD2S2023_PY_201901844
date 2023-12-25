@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 var arbolitoB *estructuras.ArbolB = &estructuras.ArbolB{Raiz: nil, Orden: 3}
@@ -46,6 +47,7 @@ func GenerarReporte(c *fiber.Ctx) error {
 
 func main() {
 	app := fiber.New()
+	app.Use(cors.New())
 	app.Post("/ingresar-arbol-b", AgregarB)
 	app.Post("/reporte", GenerarReporte)
 	app.Listen(":4000")
