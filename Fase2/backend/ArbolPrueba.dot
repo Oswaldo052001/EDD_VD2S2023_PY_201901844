@@ -1,0 +1,4 @@
+digraph arbol { 
+node[shape=record]
+R5[label="5"];
+}
