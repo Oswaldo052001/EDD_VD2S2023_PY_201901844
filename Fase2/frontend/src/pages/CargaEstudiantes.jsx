@@ -1,13 +1,12 @@
 import React from 'react'
 
-function CargarTutores() {
+function CargaEstudiantes() {
     return (
-
         <div>
-            <div id ="Tutores">
+            <div id ="Estudiantes">
                 <nav>
                     <a href="/admin">Inicio</a>
-                    <a href="/CargaEstudiantes">Cargar Estudiantes</a>
+                    <a href="/CargaTutores">Cargar Tutores</a>
                     <a href="/Libros">Libros</a>
                     <a href="/Reportes">Reportes</a>
                 </nav>
@@ -21,7 +20,7 @@ function CargarTutores() {
                 </svg></div>
             </div>
 
-            <h1 className='titulos'>TUTORES ACTIVOS</h1>
+            <h1 className='titulos'>ESTUDIANTES ACTIVOS</h1>
 
             <div id="contenedor">
 
@@ -48,7 +47,7 @@ function CargarTutores() {
                 </div>
 
                 <div id="sidebar">
-                    <h4 style={{ textAlign: 'center' }}>CARGAR TUTORES</h4>
+                    <h4 style={{ textAlign: 'center' }}>CARGAR ESTUDIANTES</h4>
                     <br />
                     <form>
                         <div className="form-group">
@@ -62,7 +61,8 @@ function CargarTutores() {
             </div>
             <br /><br /><br /><br /><br />
         </div>
+
     )
 }
 
-export default CargarTutores
+export default CargaEstudiantes
