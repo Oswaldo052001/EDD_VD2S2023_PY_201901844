@@ -184,7 +184,7 @@ header .textos-header {
     
 }
 
-.container {
+.contenedor {
     display: grid;
     align-items: center;
     justify-content: center;
@@ -197,7 +197,7 @@ header .textos-header {
 }
 
 
-.container button{
+.contenedor button{
     font-family: Verdana;
     color: white;
     border: none;

@@ -1,6 +1,28 @@
-import React from 'react'
+import React, { useState } from "react";
 
 function CargaEstudiantes() {
+
+    const [ruta, setRuta] = useState("");
+
+    const enviarRuta = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:4000/CargarEstudiantes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ruta: ruta,
+          }),
+        });
+        const result = await response.json();
+        if (result.message == "Cargado exitosamente"){
+            alert("Cargado exitosamente");
+        }else{
+            alert("No se pudo cargar el archivo");
+        }
+      };
+
     return (
         <div>
             <div id ="Estudiantes">
@@ -49,10 +71,17 @@ function CargaEstudiantes() {
                 <div id="sidebar">
                     <h4 style={{ textAlign: 'center' }}>CARGAR ESTUDIANTES</h4>
                     <br />
-                    <form>
+                    <form onSubmit={enviarRuta}>
                         <div className="form-group">
                             <label>INGRESE LA RUTA DEL ARCHIVO </label> <hr />
-                            <input type="text" className="form-control" placeholder="ruta (.csv)" />
+                            <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="ruta (.csv)" 
+                            value={ruta}
+                            onChange={(e) => setRuta(e.target.value)}
+                            autoFocus
+                            />
                         </div>
                         <br />
                         <button type="submit" className="btn btn-primary">Cargar</button>

@@ -1,6 +1,7 @@
-package estructuras
+package ArbolB
 
 import (
+	"Fase2/estructuras/GenerarArchivos"
 	"fmt"
 	"strconv"
 )
@@ -116,9 +117,9 @@ func (a *ArbolB) Graficar(nombre string) {
 		cadena += a.conexionRamas(a.Raiz.Primero)
 		cadena += "}"
 	}
-	crearArchivo(nombre_archivo)
-	escribirArchivo(cadena, nombre_archivo)
-	ejecutar(nombre_imagen, nombre_archivo)
+	GenerarArchivos.CrearArchivo(nombre_archivo)
+	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo)
+	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
 }
 
 func (a *ArbolB) grafo(rama *NodoB) string {

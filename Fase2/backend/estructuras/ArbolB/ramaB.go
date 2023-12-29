@@ -1,4 +1,4 @@
-package estructuras
+package ArbolB
 
 type RamaB struct {
 	Primero  *NodoB

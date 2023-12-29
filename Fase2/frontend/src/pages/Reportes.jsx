@@ -23,7 +23,7 @@ function Reportes() {
 
             <h1 className='titulos'>REPORTES</h1>
 
-            <div className="container">
+            <div className="contenedor">
                     <button className="btn btn-primary">Reporte Arbol B</button>
                     <button className="btn btn-warning">Reporte Grafo</button>
                     <button className="btn btn-success">Reporte Arbol Merkle</button>

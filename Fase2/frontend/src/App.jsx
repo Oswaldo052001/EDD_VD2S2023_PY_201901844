@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {Route, Routes} from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import Login from './pages/Login'
 import Admin from './pages/Admin'
 import Tutores from './pages/CargarTutores'
