@@ -1,13 +1,13 @@
 package tablahash
 
-type Estudiante struct {
+type Persona struct {
 	Carnet   int
 	Nombre   string
 	Password string
-	Cursos   string
+	Cursos   []string
 }
 
 type NodoHash struct {
 	Llave   int
-	Persona *Estudiante
+	Persona *Persona
 }

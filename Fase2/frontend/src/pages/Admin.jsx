@@ -7,8 +7,8 @@ function Admin() {
     <div>
       <header>
         <nav>
-          <a href="/CargaTutores">Cargar Tutores</a>
-          <a href="/CargaEstudiantes">Cargar Estudiantes</a>
+          <a href="/CargaMasiva">Cargar de archivos</a>
+          <a href="/Tabla-alumnos">Tabla alumnos</a>
           <a href="/Libros">Libros</a>
           <a href="/Reportes">Reportes</a>
           <a href="/">Cerrar sesión</a>

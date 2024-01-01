@@ -26,6 +26,16 @@ function Login() {
       alert("Credenciales Incorrectas");
     } else if (result.rol == 1) {
       window.open("/Admin", "_self");
+      localStorage.setItem("Tipo", "1");
+      localStorage.setItem("user", userName);
+    } else if (result.rol == 2) {
+      window.open("/menu-tutores", "_self");
+      localStorage.setItem("Tipo", "2");
+      localStorage.setItem("user", userName);
+    } else if (result.rol == 3) {
+      window.open("/menu-alumnos", "_self");
+      localStorage.setItem("Tipo", "3");
+      localStorage.setItem("user", userName);
     }
   };
 
@@ -51,7 +61,6 @@ function Login() {
                     required
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
-                    autoFocus
                     />
                     <label className="form-label">Usuario</label>
                   </div>

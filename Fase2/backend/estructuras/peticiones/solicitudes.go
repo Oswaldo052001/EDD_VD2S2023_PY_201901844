@@ -1,20 +1,46 @@
 package peticiones
 
-type SolicitudArbolB struct {
-	Valor int `json:"valor"`
+type PeticionLogin struct {
+	UserName string
+	Password string
+	Tutor    bool
+}
+
+type PeticionRegistroTutor struct {
+	Carnet   int
+	Nombre   string
+	Curso    string
+	Password string
+}
+
+type PeticionRegistroAlumno struct {
+	Carnet   int
+	Nombre   string
+	Password string
+	Cursos   []string
+}
+
+type PeticionCursos struct {
+	Cursos []Cursos
+}
+
+type Cursos struct {
+	Codigo string
+	Post   []string
+}
+
+type PeticionLibro struct {
+	Carnet    int
+	Nombre    string
+	Contenido string
+}
+
+type PeticionPublicacion struct {
+	Carnet    int
+	Contenido string
 }
 
 type SolicitudReporte struct {
-	Nombre                string `json:"nombre"`
-	Estructura_solicitada string `json:"estructura"`
-}
-
-type PeticionLogin struct {
-	UserName string `json:"userName"`
-	Password string `json:"password"`
-	Tutor    bool   `json:"tutor"`
-}
-
-type SolicitarRuta struct {
-	Ruta string `json:"ruta"`
+	Nombre                string
+	Estructura_solicitada string
 }

@@ -7,8 +7,8 @@ function Libros() {
             <div id="Libros">
                 <nav>
                     <a href="/admin">Inicio</a>
-                    <a href="/CargaTutores">Cargar Tutores</a>
-                    <a href="/CargaEstudiantes">Carga Estudiantes</a>
+                    <a href="/CargaMasiva">Cargar de archivos</a>
+                    <a href="/Tabla-alumnos">Tabla alumnos</a>
                     <a href="/Reportes">Reportes</a>
                 </nav>
 

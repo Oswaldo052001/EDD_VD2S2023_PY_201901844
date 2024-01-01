@@ -22,9 +22,9 @@ func (a *ArbolB) insertar_rama(nodo *NodoB, rama *RamaB) *NodoB { // 20,
 	} else {
 		temp := rama.Primero
 		for temp != nil {
-			if nodo.Valor == temp.Valor { //comparar si son igual y no agregarlo
+			if nodo.Valor.Curso == temp.Valor.Curso {
 				return nil
-			} else if nodo.Valor < temp.Valor {
+			} else if nodo.Valor.Curso < temp.Valor.Curso {
 				obj := a.insertar_rama(nodo, temp.Izquierdo)
 				if obj != nil {
 					rama.Insertar(obj)
@@ -49,22 +49,23 @@ func (a *ArbolB) insertar_rama(nodo *NodoB, rama *RamaB) *NodoB { // 20,
 	return nil
 }
 
-func (a *ArbolB) dividir(rama *RamaB) *NodoB { //rama = ( 10 | 15 | 20 )
-	val := &NodoB{Valor: -9999}                                 // Nodo Temporal
-	aux := rama.Primero                                         //Auxiliar para recorrer la lista
-	rderecha := &RamaB{Primero: nil, Contador: 0, Hoja: true}   //ramas temporales
-	rizquierda := &RamaB{Primero: nil, Contador: 0, Hoja: true} //ramas temporales
-	contador := 0                                               // Ayuda para saber en que nodo estoy actualmente
-	for aux != nil {                                            //Recorrer una rama
-		contador++        //1
-		if contador < 2 { // 15 | 20 | 25 -> i15d
-			temp := &NodoB{Valor: aux.Valor} // NodoB = (valor = 10)
-			temp.Izquierdo = aux.Izquierdo   // temp.izquierdo = 15.izquierdo
+func (a *ArbolB) dividir(rama *RamaB) *NodoB {
+	tutor := &Tutores{Carnet: 0, Nombre: "", Curso: "", Password: ""}
+	val := &NodoB{Valor: tutor}
+	aux := rama.Primero
+	rderecha := &RamaB{Primero: nil, Contador: 0, Hoja: true}
+	rizquierda := &RamaB{Primero: nil, Contador: 0, Hoja: true}
+	contador := 0
+	for aux != nil {
+		contador++
+		if contador < 2 {
+			temp := &NodoB{Valor: aux.Valor}
+			temp.Izquierdo = aux.Izquierdo
 			if contador == 1 {
 				temp.Derecho = aux.Siguiente.Izquierdo
 			}
-			if temp.Derecho != nil && temp.Izquierdo != nil { //Comparo, si son diferentes de null -> dividi un nodo raiz
-				rizquierda.Hoja = false //Noo es nodo hoja, sino raiz
+			if temp.Derecho != nil && temp.Izquierdo != nil {
+				rizquierda.Hoja = false
 			}
 			rizquierda.Insertar(temp)
 		} else if contador == 2 {
@@ -83,16 +84,12 @@ func (a *ArbolB) dividir(rama *RamaB) *NodoB { //rama = ( 10 | 15 | 20 )
 	nuevo := &NodoB{Valor: val.Valor}
 	nuevo.Derecho = rderecha
 	nuevo.Izquierdo = rizquierda
-	/*
-			rama = ( 15 | 20 | 25 )
-			20
-		15		25
-	*/
 	return nuevo
 }
 
-func (a *ArbolB) Insertar(valor int) { //15
-	nuevoNodo := &NodoB{Valor: valor}
+func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password string) { //15
+	tutor := &Tutores{Carnet: carnet, Nombre: nombre, Curso: curso, Password: password}
+	nuevoNodo := &NodoB{Valor: tutor}
 	if a.Raiz == nil {
 		a.Raiz = &RamaB{Primero: nil, Hoja: true, Contador: 0}
 		a.Raiz.Insertar(nuevoNodo)
@@ -109,8 +106,8 @@ func (a *ArbolB) Insertar(valor int) { //15
 /***************************************/
 func (a *ArbolB) Graficar(nombre string) {
 	cadena := ""
-	nombre_archivo := "Reportes/rep.dot/" + nombre + ".dot"
-	nombre_imagen := "Reportes/" + nombre + ".jpg"
+	nombre_archivo := "./" + nombre + ".dot"
+	nombre_imagen := nombre + ".jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
 		cadena += a.grafo(a.Raiz.Primero)
@@ -146,7 +143,7 @@ func (a *ArbolB) grafoRamas(rama *NodoB) string {
 	dot := ""
 	if rama != nil {
 		aux := rama
-		dot = dot + "R" + strconv.Itoa(rama.Valor) + "[label=\""
+		dot = dot + "R" + rama.Valor.Curso + "[label=\""
 		r := 1
 		for aux != nil {
 			if aux.Izquierdo != nil {
@@ -154,9 +151,9 @@ func (a *ArbolB) grafoRamas(rama *NodoB) string {
 				r++
 			}
 			if aux.Siguiente != nil {
-				dot = dot + strconv.Itoa(aux.Valor) + "|"
+				dot = dot + aux.Valor.Curso + "|"
 			} else {
-				dot = dot + strconv.Itoa(aux.Valor)
+				dot = dot + aux.Valor.Curso
 				if aux.Derecho != nil {
 					dot = dot + "|<C" + strconv.Itoa(r) + ">"
 				}
@@ -172,17 +169,17 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 	dot := ""
 	if rama != nil {
 		aux := rama
-		actual := "R" + strconv.Itoa(rama.Valor)
+		actual := "R" + rama.Valor.Curso
 		r := 1
 		for aux != nil {
 			if aux.Izquierdo != nil {
-				dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + strconv.Itoa(aux.Izquierdo.Primero.Valor) + ";\n"
+				dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + aux.Izquierdo.Primero.Valor.Curso + ";\n"
 				r++
 				dot += a.conexionRamas(aux.Izquierdo.Primero)
 			}
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
-					dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + strconv.Itoa(aux.Derecho.Primero.Valor) + ";\n"
+					dot += actual + ":C" + strconv.Itoa(r) + " -> " + "R" + aux.Derecho.Primero.Valor.Curso + ";\n"
 					r++
 					dot += a.conexionRamas(aux.Derecho.Primero)
 				}
@@ -194,34 +191,81 @@ func (a *ArbolB) conexionRamas(rama *NodoB) string {
 }
 
 /********************/
-func (a *ArbolB) Buscar(numero int) {
-	buscarElemento := a.buscarArbol(a.Raiz.Primero, numero)
-	if buscarElemento != nil {
-		fmt.Println("Se encontro el elemento", buscarElemento)
+func (a *ArbolB) Buscar(numero string, listaSimple *ListaSimple) {
+	valTemp, _ := strconv.Atoi(numero)
+	a.buscarArbol(a.Raiz.Primero, valTemp, listaSimple)
+	if listaSimple.Longitud > 0 {
+		fmt.Println("Se encontro el elemento", listaSimple.Longitud)
 	} else {
 		fmt.Println("No se encontro")
 	}
 }
 
-func (a *ArbolB) buscarArbol(raiz *NodoB, numero int) *NodoB {
-	var valorEncontrado *NodoB
+func (a *ArbolB) buscarArbol(raiz *NodoB, numero int, listaSimple *ListaSimple) {
 	if raiz != nil {
 		aux := raiz
 		for aux != nil {
 			if aux.Izquierdo != nil {
-				valorEncontrado = a.buscarArbol(aux.Izquierdo.Primero, numero)
+				a.buscarArbol(aux.Izquierdo.Primero, numero, listaSimple)
 			}
-			if aux.Valor == numero {
-				fmt.Println("Se enconto el valor: ", numero)
-				valorEncontrado = aux
+			if aux.Valor.Carnet == numero {
+				listaSimple.Insertar(aux)
 			}
 			if aux.Siguiente == nil {
 				if aux.Derecho != nil {
-					valorEncontrado = a.buscarArbol(aux.Derecho.Primero, numero)
+					a.buscarArbol(aux.Derecho.Primero, numero, listaSimple)
 				}
 			}
 			aux = aux.Siguiente
 		}
 	}
-	return valorEncontrado
 }
+
+func (a *ArbolB) GuardarLibro(raiz *NodoB, nombre string, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarLibro(aux.Izquierdo.Primero, nombre, contenido, carnet)
+			}
+			if aux.Valor.Carnet == carnet {
+				raiz.Valor.Libros = append(raiz.Valor.Libros, &Libro{Nombre: nombre, Contenido: contenido, Estado: 1})
+				fmt.Println("Registre el libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarLibro(aux.Derecho.Primero, nombre, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.GuardarPublicacion(aux.Izquierdo.Primero, contenido, carnet)
+			}
+			if aux.Valor.Carnet == carnet {
+				raiz.Valor.Publicaciones = append(raiz.Valor.Publicaciones, &Publicacion{Contenido: contenido})
+				fmt.Println("Registre la publicación")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.GuardarPublicacion(aux.Derecho.Primero, contenido, carnet)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+/*
+Visitar Tabla hash, si coincide el alumnos, jalan el atributo Cursos
+Buscan en Arbol B, los cursos
+*/

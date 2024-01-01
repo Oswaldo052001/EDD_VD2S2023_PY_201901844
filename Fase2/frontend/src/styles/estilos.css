@@ -78,6 +78,57 @@ header {
     position: relative;
 
 }
+
+
+#MenuTutor{
+    width: 100%;
+    height: 600px;
+    background: #fc0707;
+    background: linear-gradient(to right, hsl(27, 100%, 51%), hsla(9, 100%, 50%, 0.664)), url(../img/portadamenuTutores.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+
+}
+
+#MenuTutor .textos{
+    display: flex;
+    height: 430px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+#MenuAlumno{
+    width: 100%;
+    height: 600px;
+    background: linear-gradient(to right, hsl(0, 100%, 50%), hsla(0, 0%, 0%, 0.664)), url(../img/portadamenuTutores.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+
+}
+
+#MenuAlumno .textos{
+    display: flex;
+    height: 430px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+
+.textos h1 {
+    font-family: fantasy;
+    font-size: 50px;
+    color: #45a580;
+}
+
 .logo {
 
     width: 900px;
@@ -153,7 +204,9 @@ header .textos-header {
     width: 600px;
 }
 
-#contenedor {
+#contenedorTabla {
+    width: 80%;
+    margin: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -174,8 +227,8 @@ header .textos-header {
     width: 30%;
 }
 #sidebar2 button{
-    margin-top: 100px;
-    margin-left: 50px;
+    margin: auto;
+    margin-left: 40px;
     padding: 10px 30px;
     color: white;
     border: none;
@@ -184,20 +237,86 @@ header .textos-header {
     
 }
 
-.contenedor {
+.form-signin1 {
+    width: 100%;
+    max-width: 700px;
+    padding: 15px;
+    margin: auto;
+  }
+
+.form-publicacion{
+    text-align: center;
+    width: 100%;
+    max-width: 60%;
+    padding: 15px;
+    margin: auto;
+}
+
+.textbox
+{
+width: 80%;
+height: 20em;
+border: 1px solid #DBE1EB;
+font-size: 18px;
+font-family: Arial, Verdana;
+padding-left: 7px;
+padding-right: 7px;
+padding-top: 10px;
+padding-bottom: 10px;
+border-radius: 4px;
+-moz-border-radius: 4px;
+-webkit-border-radius: 4px;
+-o-border-radius: 4px;
+background: #FFFFFF;
+background: -webkit-linear-gradient(left, #77DD77, #A9E9A4);
+color: #2E3133;
+}
+
+.pdf {
+    text-align: center;
+    margin: auto;
+    display:block; 
+  }
+
+  input::file-selector-button {
+    background-image: linear-gradient(
+      to right,
+      #ff7a18,
+      #af002d,
+      #319197 100%,
+      #319197 200%
+    );
+    background-position-x: 0%;
+    background-size: 200%;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    padding: 1rem 1.25rem;
+    text-shadow: 0 1px 1px #333;
+    transition: all 0.25s;
+  }
+  input::file-selector-button:hover {
+    background-position-x: 100%;
+    transform: scale(1.1);
+  }
+
+
+.ContenedorReporte {
+    margin: 0 auto;
     display: grid;
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    margin: 25px;
-    width: 350px;
-    height: 500px;
-    background-color: #777777;
-    border-radius: 60px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
 }
 
 
-.contenedor button{
+.ContenedorReporte button{
+    margin-top: 50px;
+    margin-bottom: 50px;
     font-family: Verdana;
     color: white;
     border: none;
@@ -214,7 +333,10 @@ table {
     width: 100%;
 }
 
-th,
+th{
+    text-align: center;
+    padding: 20px;
+}
 td {
     padding: 20px;
 }
@@ -241,11 +363,9 @@ tr:hover td {
     padding: 9px;
     width:780px;
     height: 50px;
-    margin-top: 100px;
-    margin-left: 50px;
-    margin-bottom: 400px;
+    margin: auto;
     min-width: 225px;
-    -webkit-appearance: none;
+    appearance: none;
     background-color: #747474;
     background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
         linear-gradient(to bottom, #ffffff 0%, #f7f7f7 100%);

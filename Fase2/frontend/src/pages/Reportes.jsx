@@ -2,13 +2,21 @@ import React from 'react'
 
 
 function Reportes() {
+
+    const ReporteArbolB = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:4000/generar-reporte-arbolB", {
+            method: "GET",
+        });
+    }
+
     return (
         <div>
             <div id="Reportes">
                 <nav>
                     <a href="/admin">Inicio</a>
-                    <a href="/CargaTutores">Cargar Tutores</a>
-                    <a href="/CargaEstudiantes">Cargar Estudiantes</a>
+                    <a href="/CargaMasiva">Cargar de archivos</a>
+                    <a href="/Tabla-alumnos">Tabla alumnos</a>
                     <a href="/Libros">Libros</a>
                 </nav>
 
@@ -23,10 +31,16 @@ function Reportes() {
 
             <h1 className='titulos'>REPORTES</h1>
 
-            <div className="contenedor">
-                    <button className="btn btn-primary">Reporte Arbol B</button>
+            <div className="ContenedorReporte">
+                <form onSubmit={ReporteArbolB}>
+                    <button type="submit" className="btn btn-primary">Reporte Arbol B</button>
+                </form>
+                <form>
                     <button className="btn btn-warning">Reporte Grafo</button>
+                </form>
+                <form>
                     <button className="btn btn-success">Reporte Arbol Merkle</button>
+                </form>
             </div>
 
         </div>
