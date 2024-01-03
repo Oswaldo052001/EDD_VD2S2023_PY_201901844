@@ -6,7 +6,7 @@ import (
 	"os/exec"
 )
 
-func CrearArchivo(nombre_archivo string) {
+func CrearArchivo(nombre_archivo string, nombre string) {
 	var _, err = os.Stat(nombre_archivo)
 
 	if os.IsNotExist(err) {
@@ -16,10 +16,10 @@ func CrearArchivo(nombre_archivo string) {
 		}
 		defer file.Close()
 	}
-	fmt.Println("Archivo generado exitosamente")
+	fmt.Println(nombre + " generado exitosamente")
 }
 
-func EscribirArchivo(contenido string, nombre_archivo string) {
+func EscribirArchivo(contenido string, nombre_archivo string, nombre string) {
 	var file, err = os.OpenFile(nombre_archivo, os.O_RDWR, 0644)
 	if err != nil {
 		return
@@ -33,7 +33,7 @@ func EscribirArchivo(contenido string, nombre_archivo string) {
 	if err != nil {
 		return
 	}
-	fmt.Println("Archivo guardado correctamente")
+	fmt.Println(nombre + " generado exitosamente")
 }
 
 func Ejecutar(nombre_imagen string, archivo string) {

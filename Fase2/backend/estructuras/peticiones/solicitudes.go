@@ -40,7 +40,19 @@ type PeticionPublicacion struct {
 	Contenido string
 }
 
-type SolicitudReporte struct {
-	Nombre                string
-	Estructura_solicitada string
+type PeticionDecision struct {
+	Accion string
+	Nombre string
+	Tutor  int
+	Curso  string
+}
+
+type PeticionAlumnoSesion struct {
+	Carnet string
+	Cursos []string
+}
+
+type RespuestaImagen struct {
+	Imagenbase64 string
+	Nombre       string
 }

@@ -105,17 +105,18 @@ func (a *ArbolB) Insertar(carnet int, nombre string, curso string, password stri
 
 /***************************************/
 func (a *ArbolB) Graficar(nombre string) {
+	//backend\Reportes
 	cadena := ""
-	nombre_archivo := "./" + nombre + ".dot"
-	nombre_imagen := nombre + ".jpg"
+	nombre_archivo := "./Reportes/rep.dot/" + nombre + ".dot"
+	nombre_imagen := "./Reportes/" + nombre + ".jpg"
 	if a.Raiz != nil {
 		cadena += "digraph arbol { \nnode[shape=record]\n"
 		cadena += a.grafo(a.Raiz.Primero)
 		cadena += a.conexionRamas(a.Raiz.Primero)
 		cadena += "}"
 	}
-	GenerarArchivos.CrearArchivo(nombre_archivo)
-	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo)
+	GenerarArchivos.CrearArchivo(nombre_archivo, "Reporte de tutores")
+	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo, "Reporte de tutores")
 	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
 }
 
@@ -265,7 +266,48 @@ func (a *ArbolB) GuardarPublicacion(raiz *NodoB, contenido string, carnet int) {
 	}
 }
 
-/*
-Visitar Tabla hash, si coincide el alumnos, jalan el atributo Cursos
-Buscan en Arbol B, los cursos
-*/
+func (a *ArbolB) VerLibroAdmin(raiz *NodoB, listaSimple *ListaSimple) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.VerLibroAdmin(aux.Izquierdo.Primero, listaSimple)
+			}
+			if len(aux.Valor.Libros) > 0 {
+				listaSimple.Insertar(aux)
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.VerLibroAdmin(aux.Derecho.Primero, listaSimple)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}
+
+func (a *ArbolB) ActualizarLibro(raiz *NodoB, nombre string, curso string, tipo int) {
+	if raiz != nil {
+		aux := raiz
+		for aux != nil {
+			if aux.Izquierdo != nil {
+				a.ActualizarLibro(aux.Izquierdo.Primero, nombre, curso, tipo)
+			}
+			if aux.Valor.Curso == curso {
+				for i := 0; i < len(aux.Valor.Libros); i++ {
+					if aux.Valor.Libros[i].Nombre == nombre {
+						aux.Valor.Libros[i].Estado = tipo
+					}
+				}
+				fmt.Println("Actualizado libro")
+				return
+			}
+			if aux.Siguiente == nil {
+				if aux.Derecho != nil {
+					a.ActualizarLibro(aux.Derecho.Primero, nombre, curso, tipo)
+				}
+			}
+			aux = aux.Siguiente
+		}
+	}
+}

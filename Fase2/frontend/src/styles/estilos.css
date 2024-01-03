@@ -212,6 +212,11 @@ header .textos-header {
     flex-wrap: wrap;
 }
 
+#contenedorlibros{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 #principal {
     margin: 30px;
     width: 60%;
@@ -227,14 +232,13 @@ header .textos-header {
     width: 30%;
 }
 #sidebar2 button{
-    margin: auto;
     margin-left: 40px;
+    margin-right: 60px;
     padding: 10px 30px;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    
 }
 
 .form-signin1 {

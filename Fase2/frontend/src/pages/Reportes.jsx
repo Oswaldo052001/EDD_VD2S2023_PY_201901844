@@ -10,6 +10,21 @@ function Reportes() {
         });
     }
 
+    const ReporteMerkle = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:4000/generar-reporte-merkle", {
+            method: "GET",
+        });
+    }
+
+
+    const Reportecursos = async (e) => {
+        e.preventDefault();
+        const response = await fetch("http://localhost:4000/generar-reporte-grafo", {
+            method: "GET",
+        });
+    }
+
     return (
         <div>
             <div id="Reportes">
@@ -35,10 +50,10 @@ function Reportes() {
                 <form onSubmit={ReporteArbolB}>
                     <button type="submit" className="btn btn-primary">Reporte Arbol B</button>
                 </form>
-                <form>
+                <form onSubmit={Reportecursos}>
                     <button className="btn btn-warning">Reporte Grafo</button>
-                </form>
-                <form>
+                </form >
+                <form onSubmit={ReporteMerkle}>
                     <button className="btn btn-success">Reporte Arbol Merkle</button>
                 </form>
             </div>

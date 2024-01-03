@@ -60,18 +60,18 @@ func (g *Grafo) InsertarValores(curso string, post string) {
 	}
 }
 
-func (g *Grafo) Reporte(nombre string) {
+func (g *Grafo) Graficar(nombre string) {
 	cadena := ""
-	nombre_archivo := "./" + nombre + ".dot"
-	nombre_imagen := nombre + ".jpg"
+	nombre_archivo := "./Reportes/rep.dot/" + nombre + ".dot"
+	nombre_imagen := "./Reportes/" + nombre + ".jpg"
 	if g.Principal != nil {
 		cadena += "digraph grafoDirigido{ \n rankdir=LR; \n node [shape=box]; layout=neato; \n nodo" + g.Principal.Valor + "[label=\"" + g.Principal.Valor + "\"]; \n"
 		cadena += "node [shape = ellipse]; \n"
 		cadena += g.retornarValoresMatriz()
 		cadena += "\n}"
 	}
-	GenerarArchivos.CrearArchivo(nombre_archivo)
-	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo)
+	GenerarArchivos.CrearArchivo(nombre_archivo, "Reporte de cursos")
+	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo, "Reporte de cursos")
 	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
 }
 

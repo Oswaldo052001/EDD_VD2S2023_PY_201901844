@@ -1,8 +1,6 @@
 package tablahash
 
-import (
-	"strconv"
-)
+import "strconv"
 
 type TablaHash struct {
 	Tabla       map[int]NodoHash
@@ -38,7 +36,7 @@ func (t *TablaHash) calculoIndice(carnet int) int {
 }
 
 func (t *TablaHash) capacidadTabla() {
-	auxCap := float64(t.Capacidad) * 0.7
+	auxCap := float64(t.Capacidad) * 0.6
 	if t.Utilizacion > int(auxCap) {
 		auxAnterior := t.Capacidad
 		t.Capacidad = t.nuevaCapacidad()
@@ -159,4 +157,35 @@ func (t *TablaHash) ConvertirArreglo() []NodoHash {
 		}
 	}
 	return arrays
+}
+
+func (t *TablaHash) BuscarSesion(carnet string) *Persona {
+	valTemp, err := strconv.Atoi(carnet)
+	if err != nil {
+		return nil
+	}
+	indice := t.calculoIndice(valTemp)
+	if indice < t.Capacidad {
+		if usuario, existe := t.Tabla[indice]; existe {
+			if usuario.Persona.Carnet == valTemp {
+				return usuario.Persona
+			} else {
+				contador := 1
+				indice = t.reCalculoIndice(valTemp, contador)
+				for {
+					if usuario, existe := t.Tabla[indice]; existe {
+						if usuario.Persona.Carnet == valTemp {
+							return usuario.Persona
+						} else {
+							contador++
+							indice = t.reCalculoIndice(valTemp, contador)
+						}
+					} else {
+						return nil
+					}
+				}
+			}
+		}
+	}
+	return nil
 }

@@ -4,14 +4,14 @@ function Tabla() {
 
     const [alumnosRegistrados, SetAlumnosRegistrados] = useState([]);
     useEffect(() => {
-        async function peticion() {
-            const response = await fetch("http://localhost:4000/tabla-alumnos");
-            const result = await response.json();
-            SetAlumnosRegistrados(result.Arreglo);
-        }
-        peticion();
+      async function peticion() {
+        const response = await fetch("http://localhost:4000/tabla-alumnos");
+        const result = await response.json();
+        SetAlumnosRegistrados(result.Arreglo);
+      }
+      peticion();
     }, []);
-
+  
     return (
 
         <div>
@@ -32,7 +32,7 @@ function Tabla() {
                 </svg></div>
             </div>
 
-            <h1 className='titulos'>TUTORES ACTIVOS</h1><br />
+            <h1 className='titulos'>ALUMNOS ACTIVOS</h1><br />
 
             <div id="contenedorTabla">
                 <table>

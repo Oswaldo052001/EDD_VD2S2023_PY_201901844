@@ -96,17 +96,17 @@ func (a *ArbolMerkle) encriptarSha3(cadena string) string {
 }
 
 /*******************************************/
-func (a *ArbolMerkle) Graficar() {
+func (a *ArbolMerkle) Graficar(nombre string) {
 	cadena := ""
-	nombre_archivo := "./arbolMerkle.dot"
-	nombre_imagen := "arbolMerkle.jpg"
+	nombre_archivo := "./Reportes/rep.dot/" + nombre + ".dot"
+	nombre_imagen := "./Reportes/" + nombre + ".jpg"
 	if a.RaizMerkle != nil {
 		cadena += "digraph arbol { node [shape=box];"
 		cadena += a.retornarValoresArbol(a.RaizMerkle, 0)
 		cadena += "}"
 	}
-	GenerarArchivos.CrearArchivo(nombre_archivo)
-	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo)
+	GenerarArchivos.CrearArchivo(nombre_archivo, "Reporte de libros")
+	GenerarArchivos.EscribirArchivo(cadena, nombre_archivo, "Reporte de libros")
 	GenerarArchivos.Ejecutar(nombre_imagen, nombre_archivo)
 }
 

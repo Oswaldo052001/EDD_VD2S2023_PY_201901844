@@ -2,6 +2,7 @@ package main
 
 import (
 	"Fase2/estructuras/ArbolB"
+	"Fase2/estructuras/ArbolMerkle"
 	"Fase2/estructuras/Grafo"
 	"Fase2/estructuras/peticiones"
 	"Fase2/estructuras/tablahash"
@@ -17,23 +18,34 @@ var tablaAlumnos *tablahash.TablaHash
 var listaSimple *ArbolB.ListaSimple
 var arbolTutor *ArbolB.ArbolB
 var grafoCursos *Grafo.Grafo
+var arbolLibros *ArbolMerkle.ArbolMerkle
 
 func main() {
 	tablaAlumnos = &tablahash.TablaHash{Tabla: make(map[int]tablahash.NodoHash), Capacidad: 7, Utilizacion: 0}
 	listaSimple = &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
 	arbolTutor = &ArbolB.ArbolB{Raiz: nil, Orden: 3}
 	grafoCursos = &Grafo.Grafo{Principal: &Grafo.NodoListaAdyacencia{Valor: "ECYS"}}
+	arbolLibros = &ArbolMerkle.ArbolMerkle{RaizMerkle: nil, BloqueDeDatos: nil, CantidadBloques: 0}
 
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Post("/login", Validar)
+	//Metodos de administrador
 	app.Post("/registrar-alumno", RegistrarAlumno)
 	app.Post("/registrar-tutor", RegistrarTutor)
 	app.Post("/registrar-cursos", RegistrarCursos)
 	app.Get("/tabla-alumnos", TablaAlumnos)
+	app.Get("/enviar-libros-admin", ObtenerLibrosAdmin)
+	app.Post("/registrar-log", RegistrarDecision)
+
+	//Metodos del tutor
 	app.Post("/registrar-libro", GuardarLibro)
 	app.Post("/registrar-publicacion", GuardarPublicacion)
+
+	//Metodos reportes
 	app.Get("/generar-reporte-arbolB", GenerarReporteTutores)
+	app.Get("/generar-reporte-merkle", GenerarReporteMerkle)
+	app.Get("/generar-reporte-grafo", GenerarReporteCursos)
 	app.Listen(":4000")
 }
 
@@ -88,8 +100,7 @@ func RegistrarAlumno(c *fiber.Ctx) error {
 	//fmt.Println(alumno)
 	tablaAlumnos.Insertar(alumno.Carnet, alumno.Nombre, SHA256(alumno.Password), alumno.Cursos) //alumno.Cursos
 	return c.JSON(&fiber.Map{
-		"status":  200,
-		"Arreglo": tablaAlumnos.ConvertirArreglo(),
+		"status": 200,
 	})
 }
 
@@ -107,13 +118,6 @@ func RegistrarTutor(c *fiber.Ctx) error {
 	c.BodyParser(&tutor)
 	//fmt.Println(tutor)
 	arbolTutor.Insertar(tutor.Carnet, tutor.Nombre, tutor.Curso, SHA256(tutor.Password))
-	return c.JSON(&fiber.Map{
-		"status": 200,
-	})
-}
-
-func GenerarReporteTutores(c *fiber.Ctx) error {
-	arbolTutor.Graficar("ReporteTutores")
 	return c.JSON(&fiber.Map{
 		"status": 200,
 	})
@@ -172,7 +176,75 @@ func GuardarPublicacion(c *fiber.Ctx) error {
 	})
 }
 
+//----------------------------------------------- CONTROL LIBROS --------------------------------------------------
+
+func ObtenerLibrosAdmin(c *fiber.Ctx) error {
+	listatemp := &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
+	var libros []ArbolB.Libro
+	arbolTutor.VerLibroAdmin(arbolTutor.Raiz.Primero, listatemp)
+	if listatemp.Longitud > 0 {
+		aux := listatemp.Inicio
+		for aux != nil {
+			for i := 0; i < len(aux.Tutor.Valor.Libros); i++ {
+				if aux.Tutor.Valor.Libros[i].Estado == 1 {
+					libros = append(libros, *aux.Tutor.Valor.Libros[i])
+				}
+			}
+			aux = aux.Siguiente
+		}
+
+	}
+	if len(libros) > 0 {
+		return c.JSON(&fiber.Map{
+			"status":  200,
+			"Arreglo": libros,
+		})
+	}
+	return c.JSON(&fiber.Map{
+		"status": 500,
+	})
+}
+
+func RegistrarDecision(c *fiber.Ctx) error {
+	var accion peticiones.PeticionDecision
+	c.BodyParser(&accion)
+	arbolLibros.AgregarBloque(accion.Accion, accion.Nombre, accion.Tutor)
+	if accion.Accion == "Aceptado" {
+		arbolTutor.ActualizarLibro(arbolTutor.Raiz.Primero, accion.Nombre, accion.Curso, 2)
+		fmt.Println("se acepto el libro")
+	} else if accion.Accion == "Rechazado" {
+		arbolTutor.ActualizarLibro(arbolTutor.Raiz.Primero, accion.Nombre, accion.Curso, 3)
+		fmt.Println("se rechazo el libro")
+	}
+	return c.JSON(&fiber.Map{
+		"status": 200,
+	})
+}
+
 // ------------------------------------------------GENERAR REPORTE-------------------------------------------------
+
+func GenerarReporteTutores(c *fiber.Ctx) error {
+	arbolTutor.Graficar("ReporteTutores")
+	return c.JSON(&fiber.Map{
+		"status": 200,
+	})
+}
+
+func GenerarReporteMerkle(c *fiber.Ctx) error {
+	arbolLibros.GenerarArbol()
+	arbolLibros.Graficar("ReporteArbolMerkle")
+	return c.JSON(&fiber.Map{
+		"status": 200,
+	})
+}
+
+func GenerarReporteCursos(c *fiber.Ctx) error {
+	grafoCursos.Graficar("ReporteCursos")
+	return c.JSON(&fiber.Map{
+		"status": 200,
+	})
+}
+
 /*func GenerarReporte(c *fiber.Ctx) error {
 	fmt.Println("Recibi solicitud")
 	var reporte peticiones.SolicitudReporte

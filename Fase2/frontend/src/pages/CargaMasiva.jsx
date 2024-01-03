@@ -99,7 +99,7 @@ function CargaMasiva() {
     const rows = csvContent.split("\n");
     const encabezado = rows.slice(1);
     const sinRetorno = encabezado.map((row) => row.trim());
-    const data = sinRetorno.map((row) => row.split(";"));
+    const data = sinRetorno.map((row) => row.split(","));
     return data;
   };
 

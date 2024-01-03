@@ -1,37 +1,38 @@
 import React, { useState } from "react";
 
 function CargarLibros() {
-    const [contenidoPDF, setContenidoPDF] = useState("");
-    const uploadFileTutor = (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-  
-      reader.onload = async (event) => {
-        const content = event.target.result;
-        //console.log(content);
-        setContenidoPDF(content);
-        const valorLocal = localStorage.getItem("user");
-        const response = await fetch("http://localhost:4000/registrar-libro", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Carnet: parseInt(valorLocal),
-            Nombre: "Libro1",
-            Contenido: content,
-          }),
-        });
-  
-        const result = await response.json();
-      };
-  
-      reader.onerror = (error) => {
-        console.error("Error al leer el archivo:", error);
-      };
-  
-      reader.readAsDataURL(file);
+  const [contenidoPDF, setContenidoPDF] = useState("");
+  const uploadFileTutor = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      const content = event.target.result;
+      console.log(content);
+      setContenidoPDF(content);
+      const valorLocal = localStorage.getItem("user");
+      const response = await fetch("http://localhost:4000/registrar-libro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Carnet: parseInt(valorLocal),
+          Nombre: file.name,
+          Contenido: content,
+        }),
+      });
+
+      const result = await response.json();
     };
+
+    reader.onerror = (error) => {
+      console.error("Error al leer el archivo:", error);
+    };
+
+    reader.readAsDataURL(file);
+  };
 
     return (
         <div>
