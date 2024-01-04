@@ -1,22 +1,27 @@
 import React, { useState } from "react";
 
-function CargarPublicacion() {
+function Tutor_CargarPublicacion() {
 
-  const [publicacion, setPublicacion] = useState("");
-
-  const MandarPublicacion = async (event) => {
-    event.preventDefault();
+  const [contenidoPublicacion, setContenidoPublicacion] = useState("");
+  const CargarPublicacionTutor = async (e) => {
+    e.preventDefault();
     const valorLocal = localStorage.getItem("user");
-    const response = await fetch("http://localhost:4000/registrar-publicacion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        Carnet: parseInt(valorLocal),
-        Contenido: publicacion,
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:4000/registrar-publicacion",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Carnet: parseInt(valorLocal),
+          Nombre: valorLocal,
+          Contenido: contenidoPublicacion,
+        }),
+      }
+    );
+
+    const result = await response.json();
   };
 
   return (
@@ -37,20 +42,20 @@ function CargarPublicacion() {
       <br />
             <h1 className='titulos'>REALIZAR PUBLICACIÓN</h1><br />
             <div className="form-publicacion">
-                <form onSubmit={MandarPublicacion}>
+                <form>
                     <div className="form-group">
                         <textarea
                             className="textbox"
                             id="inputGroupFile01"
                             type="text"
                             placeholder="Escriba el contenido que deseé"
-                            value={publicacion}
-                            onChange={(event) => setPublicacion(event.target.value)}
+                            value={contenidoPublicacion}
+                            onChange={(e) => setContenidoPublicacion(e.target.value)}
                         />
                     </div>
                   {/* Submit button */}
                   <br />
-                  <button type="submit" className="btn btn-outline-success">
+                  <button onClick={CargarPublicacionTutor} className="btn btn-outline-success">
                     publicar
                   </button>
                     <br />
@@ -61,4 +66,4 @@ function CargarPublicacion() {
   )
 }
 
-export default CargarPublicacion
+export default Tutor_CargarPublicacion

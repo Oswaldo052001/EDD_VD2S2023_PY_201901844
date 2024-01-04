@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Tabla() {
+function Admin_Tabla() {
 
     const [alumnosRegistrados, SetAlumnosRegistrados] = useState([]);
     useEffect(() => {
@@ -73,4 +73,4 @@ function Tabla() {
     )
 }
 
-export default Tabla
+export default Admin_Tabla

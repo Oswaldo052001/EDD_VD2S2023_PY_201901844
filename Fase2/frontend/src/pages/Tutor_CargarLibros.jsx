@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CargarLibros() {
+function Tutor_CargarLibros() {
   const [contenidoPDF, setContenidoPDF] = useState("");
   const uploadFileTutor = (event) => {
     const file = event.target.files[0];
@@ -74,4 +74,4 @@ function CargarLibros() {
     )
 }
 
-export default CargarLibros
+export default Tutor_CargarLibros

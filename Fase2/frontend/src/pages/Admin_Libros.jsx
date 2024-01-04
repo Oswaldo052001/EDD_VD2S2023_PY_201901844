@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 
-function Libros() {
+function Admin_Libros() {
   const [libros, setLibros] = useState([]);
   const [eleccion, setEleccion] = useState(0);
 
@@ -100,6 +100,12 @@ function Libros() {
     }
   };
 
+  const finalizar = async (e) => {
+    e.preventDefault();
+    const response = await fetch("http://localhost:4000/finalizar-libros");
+    const result = await response.json();
+  };
+
   return (
     <div>
       <div id="Libros">
@@ -131,6 +137,7 @@ function Libros() {
         <div id="sidebar2">
           <button type="button" className="btn btn-success" onClick={aceptar}>ACEPTAR</button>
           <button type="button" className="btn btn-danger" onClick={rechazar}>RECHAZAR</button>
+          <button type="button" className="btn btn-warning" onClick={finalizar}>FINALIZAR</button>
         </div>
       </div>
     </div>
@@ -138,4 +145,4 @@ function Libros() {
   )
 }
 
-export default Libros
+export default Admin_Libros

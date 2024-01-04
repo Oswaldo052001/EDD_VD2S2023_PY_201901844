@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function CargaMasiva() {
+function Admin_CargaMasiva() {
 
   const uploadFileTutor = (event) => {
     const file = event.target.files[0];
@@ -176,4 +176,4 @@ function CargaMasiva() {
   )
 }
 
-export default CargaMasiva
+export default Admin_CargaMasiva

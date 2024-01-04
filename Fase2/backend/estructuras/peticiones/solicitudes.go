@@ -37,6 +37,7 @@ type PeticionLibro struct {
 
 type PeticionPublicacion struct {
 	Carnet    int
+	Nombre    string
 	Contenido string
 }
 

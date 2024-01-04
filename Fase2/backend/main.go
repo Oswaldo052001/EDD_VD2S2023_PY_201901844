@@ -37,10 +37,16 @@ func main() {
 	app.Get("/tabla-alumnos", TablaAlumnos)
 	app.Get("/enviar-libros-admin", ObtenerLibrosAdmin)
 	app.Post("/registrar-log", RegistrarDecision)
+	app.Get("/finalizar-libros", FinalizarLibros)
 
 	//Metodos del tutor
 	app.Post("/registrar-libro", GuardarLibro)
 	app.Post("/registrar-publicacion", GuardarPublicacion)
+
+	//Metodos de alumno
+	app.Post("/obtener-clases", CursosAlumnos)
+	app.Get("/obtener-libros-alumno", ObetnerLibrosAlumno)
+	app.Get("/obtener-publi-alumno", ObetnerPublicacionessAlumno)
 
 	//Metodos reportes
 	app.Get("/generar-reporte-arbolB", GenerarReporteTutores)
@@ -54,7 +60,7 @@ func Validar(c *fiber.Ctx) error {
 	var usuario peticiones.PeticionLogin
 	listaSimple = &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
 	c.BodyParser(&usuario)
-	if usuario.UserName == "ADMIN_201901844" {
+	if usuario.UserName == "ADMIN_201700918" {
 		if usuario.Password == "admin" {
 			return c.JSON(&fiber.Map{
 				"status":  200,
@@ -67,7 +73,6 @@ func Validar(c *fiber.Ctx) error {
 			arbolTutor.Buscar(usuario.UserName, listaSimple)
 			if listaSimple.Longitud > 0 {
 				if listaSimple.Inicio.Tutor.Valor.Password == SHA256(usuario.Password) {
-					fmt.Println("entro")
 					return c.JSON(&fiber.Map{
 						"status":  200,
 						"message": "Credenciales correctas",
@@ -76,6 +81,7 @@ func Validar(c *fiber.Ctx) error {
 				}
 			}
 		} else {
+			//buscar en tabla hash
 			if tablaAlumnos.Buscar(usuario.UserName, SHA256(usuario.Password)) {
 				return c.JSON(&fiber.Map{
 					"status":  200,
@@ -100,7 +106,8 @@ func RegistrarAlumno(c *fiber.Ctx) error {
 	//fmt.Println(alumno)
 	tablaAlumnos.Insertar(alumno.Carnet, alumno.Nombre, SHA256(alumno.Password), alumno.Cursos) //alumno.Cursos
 	return c.JSON(&fiber.Map{
-		"status": 200,
+		"status":  200,
+		"Arreglo": tablaAlumnos.ConvertirArreglo(),
 	})
 }
 
@@ -116,7 +123,6 @@ func TablaAlumnos(c *fiber.Ctx) error {
 func RegistrarTutor(c *fiber.Ctx) error {
 	var tutor peticiones.PeticionRegistroTutor
 	c.BodyParser(&tutor)
-	//fmt.Println(tutor)
 	arbolTutor.Insertar(tutor.Carnet, tutor.Nombre, tutor.Curso, SHA256(tutor.Password))
 	return c.JSON(&fiber.Map{
 		"status": 200,
@@ -128,7 +134,7 @@ func RegistrarTutor(c *fiber.Ctx) error {
 func RegistrarCursos(c *fiber.Ctx) error {
 	var cursito peticiones.PeticionCursos
 	c.BodyParser(&cursito)
-	//fmt.Println(cursito)
+	fmt.Println(cursito)
 	for _, curso := range cursito.Cursos {
 		if len(curso.Post) > 0 {
 			for j := 0; j < len(curso.Post); j++ {
@@ -157,7 +163,7 @@ func SHA256(cadena string) string {
 func GuardarLibro(c *fiber.Ctx) error {
 	var libro peticiones.PeticionLibro
 	c.BodyParser(&libro)
-	//fmt.Println(libro)
+	fmt.Println(libro.Nombre)
 	arbolTutor.GuardarLibro(arbolTutor.Raiz.Primero, libro.Nombre, libro.Contenido, libro.Carnet)
 	return c.JSON(&fiber.Map{
 		"status": 200,
@@ -169,7 +175,6 @@ func GuardarLibro(c *fiber.Ctx) error {
 func GuardarPublicacion(c *fiber.Ctx) error {
 	var publicacion peticiones.PeticionPublicacion
 	c.BodyParser(&publicacion)
-	fmt.Println(publicacion)
 	arbolTutor.GuardarPublicacion(arbolTutor.Raiz.Primero, publicacion.Contenido, publicacion.Carnet)
 	return c.JSON(&fiber.Map{
 		"status": 200,
@@ -221,6 +226,82 @@ func RegistrarDecision(c *fiber.Ctx) error {
 	})
 }
 
+func FinalizarLibros(c *fiber.Ctx) error {
+	arbolLibros.GenerarArbol()
+	return c.JSON(&fiber.Map{
+		"status": 200,
+	})
+}
+
+//---------------------------------------------- INFORMACIÓN ALUMNO -----------------------------------------------
+
+func CursosAlumnos(c *fiber.Ctx) error {
+	var alumno peticiones.PeticionAlumnoSesion
+	c.BodyParser(&alumno)
+	busqueda := tablaAlumnos.BuscarSesion(alumno.Carnet)
+	if busqueda != nil {
+		return c.JSON(&fiber.Map{
+			"status":  200,
+			"Arreglo": busqueda.Cursos,
+		})
+	}
+	return c.JSON(&fiber.Map{
+		"status": 500,
+	})
+}
+
+func ObetnerLibrosAlumno(c *fiber.Ctx) error {
+	listatemp := &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
+	var libros []ArbolB.Libro
+	arbolTutor.VerLibroAdmin(arbolTutor.Raiz.Primero, listatemp)
+	if listatemp.Longitud > 0 {
+		aux := listatemp.Inicio
+		for aux != nil {
+			for i := 0; i < len(aux.Tutor.Valor.Libros); i++ {
+				if aux.Tutor.Valor.Libros[i].Estado == 2 {
+					libros = append(libros, *aux.Tutor.Valor.Libros[i])
+				}
+			}
+			aux = aux.Siguiente
+		}
+
+	}
+	if len(libros) > 0 {
+		return c.JSON(&fiber.Map{
+			"status":  200,
+			"Arreglo": libros,
+		})
+	}
+	return c.JSON(&fiber.Map{
+		"status": 500,
+	})
+}
+
+func ObetnerPublicacionessAlumno(c *fiber.Ctx) error {
+	listatemp := &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
+	var publi []ArbolB.Publicacion
+	arbolTutor.VerLibroAdmin(arbolTutor.Raiz.Primero, listatemp)
+	if listatemp.Longitud > 0 {
+		aux := listatemp.Inicio
+		for aux != nil {
+			for i := 0; i < len(aux.Tutor.Valor.Publicaciones); i++ {
+				publi = append(publi, *aux.Tutor.Valor.Publicaciones[i])
+			}
+			aux = aux.Siguiente
+		}
+
+	}
+	if len(publi) > 0 {
+		return c.JSON(&fiber.Map{
+			"status":  200,
+			"Arreglo": publi,
+		})
+	}
+	return c.JSON(&fiber.Map{
+		"status": 500,
+	})
+}
+
 // ------------------------------------------------GENERAR REPORTE-------------------------------------------------
 
 func GenerarReporteTutores(c *fiber.Ctx) error {
@@ -231,7 +312,6 @@ func GenerarReporteTutores(c *fiber.Ctx) error {
 }
 
 func GenerarReporteMerkle(c *fiber.Ctx) error {
-	arbolLibros.GenerarArbol()
 	arbolLibros.Graficar("ReporteArbolMerkle")
 	return c.JSON(&fiber.Map{
 		"status": 200,
@@ -244,21 +324,3 @@ func GenerarReporteCursos(c *fiber.Ctx) error {
 		"status": 200,
 	})
 }
-
-/*func GenerarReporte(c *fiber.Ctx) error {
-	fmt.Println("Recibi solicitud")
-	var reporte peticiones.SolicitudReporte
-	c.BodyParser(&reporte)
-	if reporte.Estructura_solicitada == "Arbol B" {
-		arbolitoB.Graficar(reporte.Nombre)
-		return c.JSON(&fiber.Map{
-			"status":  200,
-			"message": "Grafica Generada",
-		})
-	} else {
-		return c.JSON(&fiber.Map{
-			"status":  400,
-			"message": "Error",
-		})
-	}
-}*/

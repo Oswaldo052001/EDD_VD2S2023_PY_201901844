@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-function Reportes() {
+function Admin_Reportes() {
 
     const ReporteArbolB = async (e) => {
         e.preventDefault();
@@ -65,4 +65,4 @@ function Reportes() {
     )
 }
 
-export default Reportes
+export default Admin_Reportes

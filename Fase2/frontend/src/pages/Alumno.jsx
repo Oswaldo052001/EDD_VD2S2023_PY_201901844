@@ -5,9 +5,9 @@ function Alumno() {
     <div>
     <div id="MenuAlumno">
       <nav>
-        <a href="/cargarLibro">Cursos</a>
-        <a href="/cargarPublicacion">Ver libros</a>
-        <a href="/">Ver publicaciones</a>
+        <a href="/vercursos">Cursos</a>
+        <a href="/verlibros">Ver libros</a>
+        <a href="/verpublicaciones">Ver publicaciones</a>
         <a href="/">Cerrar sesión</a>
       </nav>
       <section className="textos">
