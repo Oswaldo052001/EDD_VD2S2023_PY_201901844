@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Login() {
-
+  console.log(localStorage)
   const [isChecked, setIsChecked] = useState(false);
   const [userName, setUserName] = useState("");
   const [passwordUser, setPasswordUser] = useState("");

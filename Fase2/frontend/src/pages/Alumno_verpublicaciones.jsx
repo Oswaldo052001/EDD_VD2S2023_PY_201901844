@@ -6,13 +6,13 @@ function Alumno_verpublicaciones() {
 
   useEffect(() => {
     async function PedirCursos() {
+      console.log(localStorage.getItem("cursos"));
       const arregloCursos = localStorage.getItem("cursos");
       const cursosArreglo = JSON.parse(arregloCursos);
       const response = await fetch(
         "http://localhost:4000/obtener-publi-alumno"
       );
       const result = await response.json();
-      console.log(result.Arreglo);
       setCursos(cursosArreglo);
       if (result.status === 200) {
         setPublicacion(result.Arreglo);

@@ -60,7 +60,7 @@ func Validar(c *fiber.Ctx) error {
 	var usuario peticiones.PeticionLogin
 	listaSimple = &ArbolB.ListaSimple{Inicio: nil, Longitud: 0}
 	c.BodyParser(&usuario)
-	if usuario.UserName == "ADMIN_201700918" {
+	if usuario.UserName == "ADMIN_201901844" {
 		if usuario.Password == "admin" {
 			return c.JSON(&fiber.Map{
 				"status":  200,

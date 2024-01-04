@@ -1,6 +1,13 @@
 import React from 'react'
 
 function Alumno() {
+  
+  const salir = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.open("/", "_self");
+  };
+
   return (
     <div>
     <div id="MenuAlumno">
@@ -8,7 +15,7 @@ function Alumno() {
         <a href="/vercursos">Cursos</a>
         <a href="/verlibros">Ver libros</a>
         <a href="/verpublicaciones">Ver publicaciones</a>
-        <a href="/">Cerrar sesión</a>
+        <a href="/" onClick={salir}>Cerrar sesión</a>
       </nav>
       <section className="textos">
         <h1>MENÚ ALUMNO</h1>

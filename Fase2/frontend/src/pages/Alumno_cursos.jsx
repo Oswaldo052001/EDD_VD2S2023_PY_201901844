@@ -51,6 +51,7 @@ function Alumno_cursos() {
         );
     };
 
+    localStorage.setItem("cursos", JSON.stringify(cursos));
     return (
         <div>
             <div id="MenuAlumno">

@@ -1,13 +1,18 @@
 import React from 'react'
 
 function Tutor() {
+  const salir = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.open("/", "_self");
+  };
   return (
     <div>
     <div id="MenuTutor">
       <nav>
         <a href="/cargarLibro">Cargar Libro</a>
         <a href="/cargarPublicacion">Crear Publicación</a>
-        <a href="/">Cerrar sesión</a>
+        <a href="/" onClick={salir}>Cerrar sesión</a>
       </nav>
       <section className="textos">
         <h1>MENÚ TUTOR</h1>

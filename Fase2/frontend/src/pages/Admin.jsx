@@ -3,6 +3,11 @@ import '../styles/estilos.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 function Admin() {
+  const salir = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    window.open("/", "_self");
+  };
   return (
     <div>
       <header>
@@ -11,7 +16,7 @@ function Admin() {
           <a href="/Tabla-alumnos">Tabla alumnos</a>
           <a href="/Libros">Libros</a>
           <a href="/Reportes">Reportes</a>
-          <a href="/">Cerrar sesión</a>
+          <a  href="/"onClick={salir}>Cerrar sesión</a>
         </nav>
         <section className="textos-header">
 
